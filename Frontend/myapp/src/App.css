@@ -1,0 +1,51 @@
+.app-container {
+  width: 100%; /* Make the container take full width */
+  display: flex; /* Allow for easier vertical alignment and content flow */
+  flex-direction: column; /* Stack children vertically by default */
+   min-height: 100vh; /* Make sure it at least covers full viewport height*/
+}
+
+
+
+.qa-section {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.file-info {
+  background-color: #e9ecef;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.qa-item {
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.question {
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.answer {
+  color: #34495e;
+}
+
+.loader {
+  text-align: center;
+  padding: 20px;
+}
+
+.error {
+  color: #dc3545;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #f8d7da;
+  border-radius: 4px;
+}

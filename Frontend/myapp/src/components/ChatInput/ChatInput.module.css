@@ -1,0 +1,60 @@
+.chatInput {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  width: 80%;
+  margin: 0 auto;
+  position: relative;
+}
+
+.input {
+  flex: 1;
+  padding: 15px 30px;
+  border: 1px solid #c6c8cd;
+  border-radius: 5px;
+  outline: none;
+  background-color: #E4E8EE;
+  color: #6E7583; /* Changed from #c6c8cd for better readability */
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: #007bff;
+}
+
+.input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  color: #c6c8cd;
+}
+
+.input::placeholder {
+  color: #c6c8cd;
+}
+
+.sendButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: absolute;
+  top: 50%;
+  right: 30px;
+  transform: translateY(-50%);
+  transition: opacity 0.2s;
+}
+
+.sendButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.sendIcon {
+  height: 16px;
+  width: auto;
+  color: #6E7583;
+}
+
+.sendButton:hover:not(:disabled) .sendIcon {
+  color: #007bff;
+}

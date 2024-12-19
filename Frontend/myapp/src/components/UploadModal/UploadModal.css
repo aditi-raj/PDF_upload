@@ -1,0 +1,74 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+
+.closeButton {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.dropzone {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 20px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.dropzone:hover {
+    border-color: #007bff;
+    background-color: #f1f7ff;
+}
+
+.uploadIcon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 15px;
+    opacity: 0.6;
+}
+
+.orText {
+    margin: 15px 0;
+    color: #666;
+}
+
+.browseButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.browseButton:hover {
+    background-color: #0056b3;
+}
