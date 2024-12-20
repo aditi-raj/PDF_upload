@@ -1,16 +1,3 @@
-// import React from 'react';
-// import styles from './MainContent.module.css';
-
-// function MainContent() {
-//     return (
-//     <div className={styles.mainContent}>
-//         {/* Messages will go here */}
-//     </div>
-//     );
-//     }
-    
-//     export default MainContent;
-
 import React, { useRef, useEffect } from 'react';
 import styles from './MainContent.module.css';
 

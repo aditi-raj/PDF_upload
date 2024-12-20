@@ -1,36 +1,27 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
-from sqlalchemy import text
-from .utils.pdf_processor import process_pdf
-from .utils.qa_chain import get_qa_chain
-from .database import get_db
+from .utils.qa_chain import process_pdf, get_answer
+from .database import get_db, create_tables
 from .models import PDFDocument
 from typing import Dict
 import shutil
 import os
-from app.database import get_db, create_tables
+from dotenv import load_dotenv
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Load environment variables
+load_dotenv()
 
 app = FastAPI()
 
+# Create database tables on startup
 create_tables()
 
-# Test endpoint
-@app.get("/")
-def read_root():
-    return {"status": "success", "message": "Backend is running!"}
-
-# Test database connection
-@app.get("/test-db")
-async def test_db(db: Session = Depends(get_db)):
-    try:
-        # Modified this line to use text()
-        result = db.execute(text("SELECT 1")).fetchone()
-        return {"status": "success", "message": "Database connection successful!", "result": result[0]}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-# Configure CORS
+# CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -39,66 +30,121 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Create uploads directory
-os.makedirs("uploads", exist_ok=True)
+# Create uploads directory if it doesn't exist
+UPLOAD_DIR = "uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-@app.post("/upload")
-async def upload_file(
-    file: UploadFile = File(...),
-    db: Session = Depends(get_db)  # Added dependency injection
-):
-    if not file.filename.endswith('.pdf'):
-        raise HTTPException(status_code=400, detail="Only PDF files are allowed")
+@app.get("/")
+async def read_root():
+    return {"status": "success", "message": "PDF Q&A API is running"}
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
     
+@app.post("/upload")
+async def upload_file(file: UploadFile = File(...)):
     try:
+        # Validate file extension
+        if not file.filename.lower().endswith('.pdf'):
+            raise HTTPException(
+                status_code=400, 
+                detail="Only PDF files are allowed"
+            )
+        
+        # Generate safe filename and path
+        safe_filename = os.path.basename(file.filename)
+        file_path = os.path.join(UPLOAD_DIR, safe_filename)
+        
         # Save file to uploads directory
-        file_path = f"uploads/{file.filename}"
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
+        try:
+            with open(file_path, "wb") as buffer:
+                shutil.copyfileobj(file.file, buffer)
+        except Exception as e:
+            logger.error(f"Error saving file: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to save uploaded file"
+            )
         
-        # Process PDF and store in vector database
-        document_text = process_pdf(file_path)
+        try:
+            # Process PDF
+            content = process_pdf(file_path)
+        except Exception as e:
+            logger.error(f"Error processing PDF: {str(e)}")
+            # Clean up the uploaded file if processing fails
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to process PDF file"
+            )
         
-        # Store document info in database
+        # Store in database
+        db = get_db()
         pdf_doc = PDFDocument(
-            filename=file.filename,
+            filename=safe_filename,
             filepath=file_path,
-            content=document_text
+            content=content
         )
-        db.add(pdf_doc)
-        db.commit()
-        db.refresh(pdf_doc)
-        
-        return {
-            "id": pdf_doc.id,
-            "filename": file.filename,
-            "message": "File uploaded successfully"
-        }
+        try:
+            db.add(pdf_doc)
+            db.commit()
+            db.refresh(pdf_doc)
+            
+            return {
+                "id": pdf_doc.id,
+                "filename": safe_filename,
+                "message": "File uploaded successfully"
+            }
+        except Exception as e:
+            logger.error(f"Database error: {str(e)}")
+            db.rollback()
+            # Clean up the uploaded file if database operation fails
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to store file information in database"
+            )
+            
+    except HTTPException as he:
+        raise he
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Unexpected error in upload_file: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"An unexpected error occurred: {str(e)}"
+        )
+    finally:
+        await file.close()
 
 @app.post("/ask")
-async def ask_question(
-    request: Dict,
-    db: Session = Depends(get_db)  # Added dependency injection
-):
+async def ask_question(request: Dict):
     try:
-        file_id = request.get("file_id")
         question = request.get("question")
         
-        if not file_id or not question:
-            raise HTTPException(status_code=400, detail="Missing file_id or question")
-        
-        # Get document from database
-        document = db.query(PDFDocument).filter(PDFDocument.id == file_id).first()
-        
-        if not document:
-            raise HTTPException(status_code=404, detail="Document not found")
+        if not question:
+            raise HTTPException(
+                status_code=400,
+                detail="Question is required"
+            )
         
         # Get answer using QA chain
-        qa_chain = get_qa_chain(document.content)
-        response = qa_chain({"question": question})
-        
-        return {"answer": response["answer"]}
+        try:
+            answer = get_answer(question)
+            return {"answer": answer}
+        except Exception as e:
+            logger.error(f"Error getting answer: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to generate answer"
+            )
+            
+    except HTTPException as he:
+        raise he
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Unexpected error in ask_question: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"An unexpected error occurred: {str(e)}")
