@@ -2,13 +2,25 @@
 
 A full-stack application that allows users to upload PDF documents and ask questions about their content using natural language processing. The system processes the PDFs and provides relevant answers based on the document content.
 
-## Features
+## Table of Contents
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+  - [Backend](#backend)
+  - [Frontend](#frontend)
+- [Prerequisites](#prerequisites)
+- [Installation & Setup](#installation--setup)
+  - [Backend Setup](#backend-setup)
+  - [Frontend Setup](#frontend-setup)
+- [API Documentation](#api-documentation)
+  - [Endpoints](#endpoints)
+
+## 🔋Features
 
 - PDF document upload and processing
 - Natural language question answering based on PDF content
 - User-friendly interface with error handling
 
-## Tech Stack
+## ⚙️Tech Stack
 
 ### Backend
 - FastAPI
@@ -22,7 +34,7 @@ A full-stack application that allows users to upload PDF documents and ask quest
 - Node.js
 - npm package manager
 
-## Prerequisites
+## 💻Prerequisites
 
 Before running the application, ensure you have the following installed:
 - Python (any recent version)
@@ -32,7 +44,7 @@ Before running the application, ensure you have the following installed:
 ### API Keys Required
 - Google API Key (for LangChain integration, its free of cost)
 
-## Installation & Setup
+## 🚀Installation & Setup
 
 ### Backend Setup
 
@@ -87,7 +99,7 @@ Before running the application, ensure you have the following installed:
    npm start
    ```
 
-## API Documentation
+## 📄API Documentation
 
 ### Endpoints
 
