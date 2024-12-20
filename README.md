@@ -61,6 +61,8 @@ Before running the application, ensure you have the following installed:
    Create a `.env` file in the Backend directory and add:
    ```
    GOOGLE_API_KEY=your_google_api_key_here
+   //To generate API go to this link:https://aistudio.google.com/app/u/2/prompts/new_chat
+   //Click on Get API Key -> Create API Key
    ```
 
 5. Start the FastAPI server:
