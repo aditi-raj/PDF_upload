@@ -77,7 +77,6 @@ function MainContent({ messages, isLoading }) {
         }).filter(Boolean);
     };
 
-    // Change to:
 return (
     <div className={styles.mainContent}>
         {messages.map((message, index) => (
