@@ -1,8 +1,10 @@
 .app-container {
-  width: 100%; /* Make the container take full width */
-  display: flex; /* Allow for easier vertical alignment and content flow */
-  flex-direction: column; /* Stack children vertically by default */
-   min-height: 100vh; /* Make sure it at least covers full viewport height*/
+  width: 100%;
+  height: 100vh; /* Full viewport height */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden; /* Prevent any potential scrolling of the container itself */
 }
 
 

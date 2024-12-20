@@ -1,7 +1,7 @@
 .chatInput {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding-bottom: 20px;
   width: 80%;
   margin: 0 auto;
   position: relative;
@@ -14,7 +14,7 @@
   border-radius: 5px;
   outline: none;
   background-color: #E4E8EE;
-  color: #6E7583; /* Changed from #c6c8cd for better readability */
+  color: #000000; /* Changed from #c6c8cd for better readability */
   transition: border-color 0.2s;
 }
 
@@ -29,7 +29,7 @@
 }
 
 .input::placeholder {
-  color: #c6c8cd;
+  color: #737477;
 }
 
 .sendButton {
@@ -38,9 +38,7 @@
   cursor: pointer;
   padding: 0;
   position: absolute;
-  top: 50%;
   right: 30px;
-  transform: translateY(-50%);
   transition: opacity 0.2s;
 }
 

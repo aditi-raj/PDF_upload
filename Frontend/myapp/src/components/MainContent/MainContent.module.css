@@ -5,19 +5,65 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none;
+}
+.mainContent::-webkit-scrollbar {
+  display: none;
+}
+.messageContent {
+  background: #f5f5f5;
+  padding: 12px 16px;
+  border-radius: 12px;
+  position: relative;
+  flex-grow: 1;
+  word-break: break-word;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
-.emptyState {
-  text-align: center;
-  color: #666;
-  margin-top: 40px;
+.formattedContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sectionHeader {
+  font-weight: 600;
+  margin: 8px 0;
+  color: #333;
+}
+
+/* Bullet point styles */
+.bulletContainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.bullet {
+  flex-shrink: 0;
+  margin-right: 4px;
+}
+
+.bulletText {
+  flex: 1;
+}
+
+.paragraph {
+  margin: 4px 0;
 }
 
 .message {
   display: flex;
   gap: 12px;
-  max-width: 80%;
+  max-width: 90%;
   animation: fadeIn 0.3s ease-in;
+  align-items: flex-start;
 }
 
 .user {
@@ -27,12 +73,6 @@
 
 .assistant {
   margin-right: auto;
-}
-
-.system {
-  margin: 0 auto;
-  color: #666;
-  font-style: italic;
 }
 
 .avatar {
@@ -49,32 +89,17 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
 }
-.assistant .avatar {
-  background-image: "avatar.png";
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.user .avatar {
-  background: #e0e0e0;
-  color: #333;
-}
-.message {
-  display: flex;
-  gap: 12px;
-  max-width: 80%;
-  animation: fadeIn 0.3s ease-in;
-  align-items: flex-start; /* Align the avatar and message content to the top */
-}
-.messageContent {
-  background: #f5f5f5;
-  padding: 12px 16px;
-  border-radius: 12px;
-  position: relative;
-  flex-grow: 1;
-  word-break: break-word;
+.assistantAvatar {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
 }
 
+.aiIcon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 .user .messageContent {
   background: #007bff;
   color: white;
@@ -110,4 +135,32 @@
 @keyframes bounce {
   0%, 80%, 100% { transform: scale(0); }
   40% { transform: scale(1); }
+}
+
+.system {
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.systemMessage {
+  background-color: #f0f7ff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 1px solid #cce5ff;
+  color: #0066cc;
+  font-size: 14px;
+  text-align: center;
+  animation: slideDown 0.5s ease-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+@keyframes slideDown {
+  from {
+      transform: translateY(-20px);
+      opacity: 0;
+  }
+  to {
+      transform: translateY(0);
+      opacity: 1;
+  }
 }

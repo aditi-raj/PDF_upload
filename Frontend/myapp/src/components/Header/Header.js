@@ -1,22 +1,3 @@
-// import React from 'react';
-// import styles from './Header.module.css';
-
-// function Header() {
-//     return (
-//         <header className={styles.header}>
-//         <div className={styles.logo}>
-//             <img src="AI Planet Logo.png" alt="AI Planet Logo" className={styles.logoImg} />  
-//         </div>
-//         <button className={styles.uploadButton}>
-//             <span className={styles.plusSign}>+</span> Upload PDF
-//         </button>
-
-//         </header>
-//     );
-//     }
-
-// export default Header;
-
 import React, { useState } from 'react';
 import styles from './Header.module.css';
 
